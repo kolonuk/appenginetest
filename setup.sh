@@ -5,9 +5,9 @@ PROJECT_NAME="cloudruntest"
 PROJECT_ID="cloudruntest-$(date +%s)"
 SERVICE_ACCOUNT_NAME="github"
 REGION="europe-west1"
-REPO="kolonuk/cloudruntest"
 WIP_NAME="github"
 GITHUB_ORG="kolonuk"
+REPO="cloudruntest"
 
 # Authenticate with Google Cloud SDK
 #gcloud auth login  # enable only required for first run
@@ -92,9 +92,9 @@ gcloud iam service-accounts add-iam-policy-binding ${SERVICE_ACCOUNT_NAME}@${PRO
 #   --iam-account=${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com
 
 # Add GitHub secrets
-gh secret set GCP_PROJECT_ID -b"$PROJECT_ID" -R $REPO
-gh secret set GCP_REGION -b"$REGION" -R $REPO
-gh secret set GCP_WORKLOAD_IDENTITY_PROVIDER -b"$WIPROVIDER" -R $REPO
-gh secret set GCP_SERVICE_ACCOUNT -b"${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" -R $REPO
+gh variable set GCP_PROJECT_ID -b"$PROJECT_ID" -R $GITHUB_ORG/$REPO
+gh variable set GCP_REGION -b"$REGION" -R $GITHUB_ORG/$REPO
+gh variable set GCP_SERVICE_ACCOUNT -b"${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" -R $GITHUB_ORG/$REPO
+gh secret set GCP_WORKLOAD_IDENTITY_PROVIDER -b"$WIPROVIDER" -R $GITHUB_ORG/$REPO
 
-echo "Project setup complete. GitHub secrets have been set up for repository $REPO."
+echo "Project setup complete. GitHub secrets have been set up for repository $GITHUB_ORG/$REPO."
