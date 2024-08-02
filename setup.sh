@@ -3,7 +3,7 @@
 # Variables
 PROJECT_NAME="cloudruntest"
 PROJECT_ID="cloudruntest-$(date +%s)"
-SERVICE_ACCOUNT_NAME="github-actions"
+SERVICE_ACCOUNT_NAME="github"
 REGION="europe-west1"
 REPO="kolonuk/cloudruntest"
 WIP_NAME="github"
