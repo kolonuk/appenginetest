@@ -49,6 +49,9 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
   --role="roles/viewer" > /dev/null
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --role="roles/iam.serviceAccountTokenCreator" > /dev/null
 
 # Assign the Workload Identity Pool Admin role to the current user
 GCLOUD_USER=$(gcloud config get account)
@@ -87,14 +90,10 @@ gcloud iam service-accounts add-iam-policy-binding ${SERVICE_ACCOUNT_NAME}@${PRO
   --role="roles/iam.workloadIdentityUser" \
   --member="principalSet://iam.googleapis.com/${WIPOOL}/attribute.repository/${REPO}" > /dev/null
 
-# # Create and download service account key
-# gcloud iam service-accounts keys create key.json \
-#   --iam-account=${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com
-
 # Add GitHub secrets
 gh variable set GCP_PROJECT_ID -b"$PROJECT_ID" -R $GITHUB_ORG/$REPO
 gh variable set GCP_REGION -b"$REGION" -R $GITHUB_ORG/$REPO
 gh variable set GCP_SERVICE_ACCOUNT -b"${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" -R $GITHUB_ORG/$REPO
-gh secret set GCP_WORKLOAD_IDENTITY_PROVIDER -b"$WIPROVIDER" -R $GITHUB_ORG/$REPO
+gh variable set GCP_WORKLOAD_IDENTITY_PROVIDER -b"$WIPROVIDER" -R $GITHUB_ORG/$REPO
 
 echo "Project setup complete. GitHub secrets have been set up for repository $GITHUB_ORG/$REPO."
